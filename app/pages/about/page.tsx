@@ -1,15 +1,27 @@
 "use client"
 
+import Image from "next/image"
+
 export default function AboutPage() {
     return (
         <section className="max-w-7xl mx-auto px-4 pb-10 md:pb-16 pt-10 text-gray-800">
-            <h1 className="text-center text-4xl font-fondamento font-bold mb-5">About Us</h1>
 
-            <img 
-                src="/banner-2.jpg" 
-                alt="banner"
-                className=" w-[400px] h-[400px] mb-10"
-            />
+            <div className="relative w-full h-[400px] md:h-[300px] flex flex-col md:flex-row items-center justify-between overflow-hidden rounded mb-6">
+                <Image
+                    src="/banner-2.jpg"
+                    alt="Steady Bite Shawarma Background"
+                    fill
+                    priority
+                    className="object-cover object-center cursor-pointer"
+                />
+
+                <div className="absolute top-0 bottom-0 left-0 right-0 backdrop-blur-md bg-black/70"></div>
+
+                <div className="w-full h-full relative z-10 flex items-center justify-center text-center">
+                    <h1 className=" text-white text-5xl font-fondamento font-bold">About Us</h1>
+                </div>
+
+            </div>
 
             <div className="w-full flex flex-col gap-4">
 

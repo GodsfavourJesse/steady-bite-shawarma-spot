@@ -15,13 +15,13 @@ export default function Navbar() {
         { href: "/pages/about", label: "About us" },
         { href: "/pages/privacy-policy", label: "Privacy Policy" },
         { href: "/refund-policy", label: "Refund Policy" },
-        { href: "/shipping-policy", label: "Shipping Policy" },
+        { href: "/pages/delivery-policy", label: "Delivery Policy" },
         { href: "/terms", label: "Terms of Service" },
     ];
 
     return (
         <nav className="w-full bg-white text-black shadow-sm relative z-[1000]">
-        {/* 🔹 Top Section */}
+            {/* 🔹 Top Section */}
             <div className="flex flex-col md:flex-row items-center justify-between px-4 md:px-20 py-4 border-b border-gray-200">
                 {/* ✅ Mobile Layout */}
                 <div className="flex justify-between items-center w-full md:hidden mb-3 md:mb-0">
