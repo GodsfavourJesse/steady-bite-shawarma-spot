@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Metal_Mania, Fondamento } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Sponsors from "@/components/Sponsors";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -41,7 +42,9 @@ export default function RootLayout({
 
                 <main className="min-h-screen">{children}</main>
 
-                <footer className="text-center py-6 text-zinc-600 border-t border-zinc-300 text-sm">
+                <Sponsors />
+                
+                <footer className="text-center py-6 text-zinc-600 text-sm">
                 <p>© {new Date().getFullYear()} Steady Bite — Where shawarma dreams come true.</p>
                 {/* <a href="">Powered by Schema World Technologies</a> */}
                 </footer>

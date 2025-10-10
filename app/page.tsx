@@ -2,7 +2,6 @@
 import Banner from "@/components/Banner";
 import Hero from "@/components/Hero";
 import Sales from "@/components/Sale";
-import Sponsors from "@/components/Sponsors";
 
 export default function HomePage() {
     return (
@@ -10,7 +9,6 @@ export default function HomePage() {
             <Hero />
             <Sales />
             <Banner />
-            <Sponsors />
         </main>
     );
 }

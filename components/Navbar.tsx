@@ -11,9 +11,9 @@ export default function Navbar() {
 
     const menuLinks = [
         { href: "/", label: "Home" },
-        { href: "/contact", label: "Contact us" },
-        { href: "/about", label: "About us" },
-        { href: "/privacy-policy", label: "Privacy Policy" },
+        { href: "/pages/contact", label: "Contact us" },
+        { href: "/pages/about", label: "About us" },
+        { href: "/pages/privacy-policy", label: "Privacy Policy" },
         { href: "/refund-policy", label: "Refund Policy" },
         { href: "/shipping-policy", label: "Shipping Policy" },
         { href: "/terms", label: "Terms of Service" },

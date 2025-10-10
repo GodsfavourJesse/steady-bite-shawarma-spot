@@ -59,7 +59,7 @@ export default function Sales() {
     return (
         <section className="w-full bg-white">
             {/* 🟡 Section Header */}
-            <h1 className="font-fondamento text-[#DB751D] text-4xl md:text-5xl font-bold text-left mb-7">
+            <h1 className="font-fondamento text-[#DB751D] text-4xl md:text-5xl font-bold text-left md:mt-7 mb-7">
                 Only at Steady Bite
             </h1>
 

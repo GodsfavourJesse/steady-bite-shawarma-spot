@@ -2,8 +2,8 @@
 
 export default function Sponsors() {
     return (
-        <div className="w-full h-[100px] flex flex-col items-center justify-center gap-4 mb-10">
-            <h2>We accept</h2>
+        <div className="w-full h-[250px] flex flex-col items-center justify-center gap-4 mt-10 md:mt-0 border border-t-gray-100">
+            <h2 className="text-xl text-bold">We accept</h2>
 
             <div className="flex items-center justify-center gap-2">
                 <img 
