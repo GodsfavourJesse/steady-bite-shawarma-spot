@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -39,13 +40,15 @@ export default function RootLayout({
             className={`${poppins.variable} ${fondamento.variable}`}
         >
             <body className="bg-white text-black font-poppins">
-                <Navbar />
+                <CartProvider>
+                    <Navbar />
 
-                <main className="min-h-screen">{children}</main>
+                    <main className="min-h-screen">{children}</main>
 
-                <Sponsors />
+                    <Sponsors />
 
-                <Footer />
+                    <Footer />
+                </CartProvider>
             </body>
         </html>
     );

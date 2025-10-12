@@ -5,17 +5,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingBag, Menu, X, ChevronRight, User2 } from "lucide-react";
+import CartIcon from "./CartIcon";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const menuLinks = [
         { href: "/", label: "Home" },
-        { href: "/pages/contact", label: "Contact us" },
-        { href: "/pages/about", label: "About us" },
-        { href: "/pages/privacy-policy", label: "Privacy Policy" },
+        { href: "/contact", label: "Contact us" },
+        { href: "/about", label: "About us" },
+        { href: "/privacy-policy", label: "Privacy Policy" },
         { href: "/refund-policy", label: "Refund Policy" },
-        { href: "/pages/delivery-policy", label: "Delivery Policy" },
+        { href: "/delivery-policy", label: "Delivery Policy" },
         { href: "/terms", label: "Terms of Service" },
     ];
 
@@ -143,13 +144,14 @@ export default function Navbar() {
                             <span className="text-sm font-medium">Account</span>
                         </Link>
 
-                        <Link
-                            href="/cart"
-                            className="flex items-center gap-2 text-gray-700 hover:text-gray-800 transition-ease"
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.3 }}
                         >
-                            <ShoppingBag size={22} />
-                            <span className="text-sm font-medium">Cart</span>
-                        </Link>
+                            <CartIcon />
+                        </motion.div>
+
                     </motion.div>
                 </div>
 
