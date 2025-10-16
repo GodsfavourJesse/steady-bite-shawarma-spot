@@ -6,3 +6,12 @@ body {
   background-color: #ffffff;
   color: #000000;
 }
+
+/* Hide scrollbar completely across browsers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
