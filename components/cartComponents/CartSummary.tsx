@@ -6,11 +6,9 @@ import { calculateDeliveryFee } from "@/components/DeliveryFeeCalculator";
 export default function CartSummary({
     subtotal,
     totalItems,
-    // clearCart,
 }: {
     subtotal: number;
     totalItems: number;
-    // clearCart: () => void;
 }) {
     // Auto-calculate delivery fee using your logic
     const deliveryFee = calculateDeliveryFee(totalItems);
@@ -59,7 +57,7 @@ export default function CartSummary({
                 </div>
             </motion.div>
 
-            {/* Checkout + Clear Cart */}
+            {/* Checkout */}
             <motion.div
                 className="flex flex-col gap-3 mt-3 md:flex-row md:gap-6"
                 initial={{ opacity: 0, y: 15 }}
@@ -73,14 +71,6 @@ export default function CartSummary({
                 >
                     Checkout with Opay
                 </motion.button>
-
-                {/* <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className="md:w-[150px] bg-gray-200 text-gray-700 rounded-[10px] py-2.5 text-sm md:text-base font-medium hover:bg-gray-300 transition-all"
-                    onClick={clearCart}
-                >
-                    Clear Cart
-                </motion.button> */}
             </motion.div>
         </motion.div>
     );
