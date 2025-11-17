@@ -2,17 +2,40 @@
 
 import Image from "next/image";
 import { CheckIcon, ChevronDown, ChevronUp, Heart } from "lucide-react";
-import OpayCheckoutModal from "@/components/OpayCheckoutModal";
 import { useCart } from "@/context/CartContext";
 import QuantitySelector from "@/components/QuantitySelector";
 import { useState } from "react";
 import Sponsors from "../Sponsors";
+import { useRouter } from "next/navigation";
+
 
 export default function ProductDetailsDesktop({ product }: { product: any }) {
     const { addToCart } = useCart();
     const [activeImage, setActiveImage] = useState<string>(product.images[0]);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
+    const handleBuyNow = () => {
+        setLoading(true);
+
+        // Declare checkoutItem first
+        const checkoutItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+            quantity,
+        };
+
+        // Encode item in query (fastest method for single product)
+        const encodedItem = encodeURIComponent(JSON.stringify(checkoutItem));
+        setTimeout(() => {
+            router.push(`/checkout?item=${encodedItem}`);
+        }, 500);
+    };
+
 
     const toggle = (index: number) =>
         setOpenIndex(openIndex === index ? null : index);
@@ -33,7 +56,25 @@ export default function ProductDetailsDesktop({ product }: { product: any }) {
     };
 
     return (
-        <div className="hidden md:flex flex-col w-full bg-white min-h-screen md:max-w-6xl mx-auto gap-8 md:p-10">
+        <div className="relative hidden md:flex flex-col w-full bg-white min-h-screen md:max-w-6xl mx-auto gap-8 md:p-10">
+
+            {/* --- Loading overlay --- */}
+            {loading && (
+                <div className="fixed w-full h-screen absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                    <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+                    <style jsx>{`
+                        .loader {
+                            border-top-color: #DB751D;
+                            animation: spin 1s linear infinite;
+                        }
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `}</style>
+                </div>
+            )}
+
             <div className="flex gap-8">
                 {/* --- Image Section --- */}
                 <div className="w-1/2 flex flex-col gap-4">
@@ -112,7 +153,15 @@ export default function ProductDetailsDesktop({ product }: { product: any }) {
                     </div>
 
                     <div className="flex flex-col gap-3 mt-6">
-                        <OpayCheckoutModal product={{ ...product, quantity }} />
+
+                        <button
+                            onClick={handleBuyNow}
+                            className="w-full mt-5 bg-orange-600 text-white py-3 rounded-xl font-semibold text-lg shadow-md hover:bg-orange-700 transition-colors"
+                        >
+                            {loading ? "Redirecting..." : "Buy Now"}
+                        </button>
+
+
                         <a
                             href="#"
                             className="text-[#DB751D] font-medium text-[15px] underline"

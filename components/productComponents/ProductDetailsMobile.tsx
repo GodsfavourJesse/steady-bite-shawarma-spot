@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { CheckIcon, ChevronDown, ChevronUp, Heart, ChevronLeft } from "lucide-react";
-import OpayCheckoutModal from "@/components/OpayCheckoutModal";
 import { useCart } from "@/context/CartContext";
 import QuantitySelector from "@/components/QuantitySelector";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sponsors from "../Sponsors";
 
@@ -16,6 +15,29 @@ export default function ProductDetailsMobile({ product }: { product: any }) {
     const [activeImage, setActiveImage] = useState<string>(product.images[0]);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
+    const [loading, setLoading] = useState(false);
+    
+    const handleBuyNow = () => {
+        setLoading(true);
+
+        // Declare checkoutItem first
+        const checkoutItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+            quantity,
+        };
+
+        // Encode item in query (fastest method for single product)
+        const encodedItem = encodeURIComponent(JSON.stringify(checkoutItem));
+
+
+        setTimeout(() => {
+            router.push(`/checkout?item=${encodedItem}`);
+        }, 500);
+    };
+
 
     const toggle = (index: number) =>
         setOpenIndex(openIndex === index ? null : index);
@@ -35,6 +57,19 @@ export default function ProductDetailsMobile({ product }: { product: any }) {
         });
     };
 
+    const handleBack = () => {
+        // check if there's a previous history
+        if (window.history.length > 1) {
+            setTimeout(() => {
+                router.back();
+            }, 500)
+        } else {
+            setTimeout(() => {
+                router.push("/"); // fallback to home page
+            }, 500)
+        }
+    };
+
     return (
         <motion.div 
             initial={{ opacity: 0, x: 50 }}
@@ -43,6 +78,25 @@ export default function ProductDetailsMobile({ product }: { product: any }) {
             transition={{ duration: 0.35, ease: "easeInOut" }}
             className="flex flex-col bg-white min-h-screen md:hidden overflow-x-hidden"
         >
+
+            {/* --- Loading overlay --- */}
+            {loading && (
+                <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+                    <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+                    <style jsx>{`
+                        .loader {
+                            border-top-color: #DB751D;
+                            animation: spin 1s linear infinite;
+                        }
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `}</style>
+                </div>
+            )}
+
+
             {/* 🌆 Product Image Background */}
             <motion.div
                 initial={{ opacity: 0 }}
@@ -66,15 +120,12 @@ export default function ProductDetailsMobile({ product }: { product: any }) {
                 {/* Back Button */}
                 <motion.button
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => router.back()}
+                    onClick={handleBack}
                     className="absolute top-5 left-4 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-md hover:bg-white transition"
                 >
                     <ChevronLeft 
                         className="text-gray-800" 
                         size={20} 
-                        onClick={() => {
-                            setTimeout(() => router.push("/collection"))
-                        }}
                     />
                 </motion.button>
 
@@ -158,7 +209,16 @@ export default function ProductDetailsMobile({ product }: { product: any }) {
                     transition={{ delay: 0.4, duration: 0.5 }}
                     className="flex flex-col gap-3 mt-5"
                 >
-                    <OpayCheckoutModal product={{ ...product, quantity }} />
+
+                    <button
+                        onClick={handleBuyNow}
+                        disabled={loading}
+                        className="w-full mt-5 bg-orange-600 text-white py-3 rounded-xl font-semibold text-lg shadow-md hover:bg-orange-700 transition-colors"
+                    >
+                        {loading ? "Processing..." : "Buy Now"}
+                    </button>
+
+
                     <button className="text-center text-[#DB751D] font-medium text-[15px] underline hover:text-[#c46412] transition-colors">
                         More payment options
                     </button>

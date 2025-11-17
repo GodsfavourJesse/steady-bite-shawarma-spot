@@ -15,7 +15,7 @@ export default function MobileHero() {
                 className="w-full h-[190px] rounded-[28px] overflow-hidden shadow-xl relative"
             >
                 <Image
-                    src="/shawarma-3.jpg"
+                    src="/shawarma-111.jpg"
                     alt="Steady Bite Shawarma Background"
                     fill
                     priority

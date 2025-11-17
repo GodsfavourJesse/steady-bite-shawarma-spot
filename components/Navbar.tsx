@@ -6,47 +6,36 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, User2 } from "lucide-react";
 import CartIcon from "./CartIcon";
+import SearchBox from "./SearchBox";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const menuLinks = [
         { href: "/", label: "Home" },
+        { href: "/collection", label: "Collection" },
         { href: "/contact", label: "Contact us" },
         { href: "/about", label: "About us" },
         { href: "/privacy-policy", label: "Privacy Policy" },
-        { href: "/refund-policy", label: "Refund Policy" },
         { href: "/delivery-policy", label: "Delivery Policy" },
-        { href: "/terms", label: "Terms of Service" },
+        { href: "/terms-of-service", label: "Terms of Service" },
     ];
 
     return (
         <nav className="hidden md:block w-full bg-white text-black shadow-sm relative z-[1000]">
             {/* Desktop Top Section */}
-            <div className="flex items-center justify-between px-20 py-4 border-b border-gray-200">
+            <div className="relative w-full h-[10rem] flex items-center justify-between px-20 py-4 border-b border-gray-200">
                 {/* Left — Search */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="flex items-center w-1/3 justify-start"
-                >
-                    <div className="relative w-full max-w-xs">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className="w-full h-[2.8rem] bg-black text-white placeholder-gray-300 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-gray-600 transition-all"
-                        />
-                        <Search size={20} className="absolute right-3 top-3 text-white" />
-                    </div>
-                </motion.div>
+                <div className="flex-1">
+                    <SearchBox />
+                </div>
 
                 {/* Middle — Logo */}
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.4 }}
-                    className="flex justify-center w-1/3"
+                    className="absolute left-1/2 top-1/1 -translate-x-1/2 -translate-y-1/2"
                 >
                     <Link href="/" className="flex items-center justify-center">
                         <Image
@@ -64,7 +53,7 @@ export default function Navbar() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="flex justify-end items-center gap-6 w-1/3"
+                    className="flex justify-end items-center gap-6"
                 >
                     <Link
                         href="/account"

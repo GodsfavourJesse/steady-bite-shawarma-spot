@@ -9,6 +9,7 @@ import Link from "next/link";
 import QuantitySelector from "@/components/QuantitySelector";
 import CartSummary from "./CartSummary";
 import DeliveryAddress from "../DeliveryAddress";
+import CustomerContactInfo from "../CustomerContactInfo";
 
 export default function CartMobile() {
     const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
@@ -28,17 +29,33 @@ export default function CartMobile() {
 
     if (cart.length === 0) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-screen bg-white text-gray-700 md:hidden">
-                <p>Your cart is empty!</p>
-                <Link href="/collection" className="mt-4 bg-orange-600 hover:bg-orange-800 text-white px-6 py-3 rounded-full">
+            <div className="flex flex-col justify-center items-center min-h-screen bg-white text-gray-700 px-6 md:hidden">
+            
+                {/* Fun illustration or emoji */}
+                <div className="text-6xl mb-6 animate-bounce">🥙</div>
+                
+                {/* Headline */}
+                <h2 className="text-2xl font-bold mb-2 text-gray-800">Oops! Your cart is empty.</h2>
+                
+                {/* Friendly message */}
+                <p className="text-gray-600 mb-6 text-center max-w-xs">
+                    Looks like you haven’t added any delicious Steady Bite treats yet. Let’s fix that!
+                </p>
+                
+                {/* Shop Now button */}
+                <Link
+                    href="/collection"
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all transform hover:scale-105"
+                >
                     Shop Now
                 </Link>
             </div>
         );
     }
 
+
     return (
-        <div className="flex flex-col bg-white min-h-screen md:hidden mb-20">
+        <div className="flex flex-col bg-white min-h-screen md:hidden mb-10">
             {/* Header Image with Back Arrow */}
             <div className="relative w-full h-[15vh]">
                 <Image src="/shawarma-4.jpg" alt="Cart" fill priority className="object-cover object-center" />
@@ -110,13 +127,8 @@ export default function CartMobile() {
                     </motion.div>
                 ))}
 
-                <DeliveryAddress />
-
                 {/* Summary Section */}
-                <CartSummary
-                    subtotal={subtotal}
-                    totalItems={totalItems}
-                />
+                <CartSummary />
             </motion.div>
         </div>
     );

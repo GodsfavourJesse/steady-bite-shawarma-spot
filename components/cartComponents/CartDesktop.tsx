@@ -8,6 +8,7 @@ import Link from "next/link";
 import QuantitySelector from "@/components/QuantitySelector";
 import CartSummary from "./CartSummary";
 import DeliveryAddress from "../DeliveryAddress";
+import CustomerContactInfo from "../CustomerContactInfo";
 
 export default function CartDesktop() {
     const { cart, removeFromCart, updateQuantity } = useCart();
@@ -26,25 +27,32 @@ export default function CartDesktop() {
 
     if (cart.length === 0) {
         return (
-            <div className="hidden md:flex flex-col items-center justify-center min-h-screen bg-gray-50 text-center">
-                <Image
-                    src="/empty-cart.svg"
-                    alt="Empty cart"
-                    width={220}
-                    height={220}
-                    className="mb-6"
-                />
-                <h2 className="text-2xl font-semibold text-gray-800">Your cart is empty</h2>
-                <p className="text-gray-500 mt-2 mb-6">Add some items to make it happy 😊</p>
+            <div className="hidden md:flex flex-col justify-center items-center min-h-screen bg-gray-50 text-center px-6">
+                
+                {/* Fun illustration or emoji */}
+                <div className="text-8xl mb-8 animate-bounce">🥙</div>
+                
+                {/* Headline */}
+                <h2 className="text-3xl font-extrabold mb-3 text-gray-800">
+                    Oops! Your cart is empty.
+                </h2>
+                
+                {/* Friendly message */}
+                <p className="text-gray-600 mb-8 max-w-md">
+                    Looks like you haven’t added any delicious Steady Bite treats yet. Let’s fix that and fill your cart with flavor!
+                </p>
+                
+                {/* Shop Now button */}
                 <Link
                     href="/collection"
-                    className="bg-orange-500 hover:bg-orange-700 text-white font-medium px-6 py-3 rounded-full transition-all"
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-10 py-4 rounded-full font-semibold shadow-lg transition-all transform hover:scale-105"
                 >
                     Start Shopping
                 </Link>
             </div>
         );
     }
+
 
     return (
         <div className="hidden md:flex flex-col items-center w-full min-h-screen bg-gray-50 py-12 px-8">
@@ -55,7 +63,7 @@ export default function CartDesktop() {
             </div>
 
             {/* Cart Layout */}
-            <div className="grid grid-cols-3 gap-10 w-full max-w-6xl">
+            <div className="grid grid-cols-3 gap-6 w-full max-w-6xl">
                 {/* Left - Cart Items */}
                 <div className="col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 overflow-y-auto max-h-[70vh]">
                     {cart.map((item: any) => (
@@ -106,19 +114,13 @@ export default function CartDesktop() {
                 </div>
 
                 {/* Right - Summary */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between">
-                    <div>
-                        <DeliveryAddress />
-                    </div>
-                    <div className="mt-6">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div className="mt-1">
                         <CartSummary
-                            subtotal={subtotal}
-                            totalItems={totalItems}
+                            // subtotal={subtotal}
+                            // totalItems={totalItems}
                         />
                     </div>
-                    <button className="mt-8 w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-4 rounded-xl transition-all shadow-md">
-                        Proceed to Checkout
-                    </button>
                 </div>
             </div>
         </div>

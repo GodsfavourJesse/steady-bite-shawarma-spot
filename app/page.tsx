@@ -1,4 +1,6 @@
 // app/page.tsx
+"use client";
+
 import Banner from "@/components/Banner";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -22,7 +24,7 @@ export default function HomePage() {
 
             {/* Content */}
             <div className="relative flex flex-col gap-6">
-                <div className="md:hidden flex flex-col gap-2 px-[5%] pt-[2%]">
+                <div className="z-50 md:hidden flex flex-col gap-2 px-[5%] pt-[2%]">
                     <Header />
                     <SearchBox />
                 </div>

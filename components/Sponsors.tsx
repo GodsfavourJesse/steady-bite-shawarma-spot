@@ -39,7 +39,7 @@ export default function Sponsors() {
           className="transition-all duration-300 drop-shadow-lg"
         >
           <Image
-            src="/opay.png"
+            src="/opay-logo.png"
             alt="Opay"
             width={90}
             height={90}
@@ -52,7 +52,7 @@ export default function Sponsors() {
           className="transition-all duration-300 drop-shadow-lg"
         >
           <Image
-            src="/paypal.png"
+            src="/paystack.png"
             alt="PayPal"
             width={90}
             height={90}

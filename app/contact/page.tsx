@@ -1,241 +1,181 @@
 "use client";
+
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Phone,
+  MapPin,
+  Mail,
+  Clock,
+  MessageCircle,
+  ChevronDown,
+  ChevronUp,
+  Calendar,
+  Timer,
+  ChevronLeft,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ContactPage() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        prices: [] as string[],
-        quantity: "1",
-        address: "",
-        message: "",
-    });
-    const [status, setStatus] = useState("");
+    const toggle = (i: number) => setOpenIndex(prev => (prev === i ? null : i));
 
-    const toggle = (index: number) =>
-        setOpenIndex(openIndex === index ? null : index);
+    const router = useRouter();
+    const handleBack = () => router.back();
 
     const faqs = [
         {
-            question:
-                "Want to visit us in-person? Here is our store location with an address.",
+            question: "Where is Steady Bite located?",
             answer:
-                "Steady Bite Shawarma Spot — Besides Assemblies of God, Rumuosi Junction, Port Harcourt, Nigeria. We’re open daily from 6:30 PM to 10:30 PM.",
+                "Steady Bite Shawarma Spot — Beside Assemblies of God, Rumuosi Junction, Port Harcourt, Nigeria.",
         },
         {
-            question: "Want to know more about your order?",
-            answer: "Contact us on WhatsApp at +234 916 604 2066.",
+            question: "What are your opening hours?",
+            answer: "We are open every day from 6:30 PM to 10:30 PM.",
         },
         {
-            question: "Do you have any complaints?",
-            answer:
-                "We’re sorry to hear that 😔. Please fill the contact form below or message us on WhatsApp — we’ll fix it fast.",
+            question: "How can I place an order?",
+            answer: "You can place an order through WhatsApp or directly from our website checkout.",
         },
         {
-            question: "Have any positive or negative feedback?",
-            answer:
-                "We’d love to hear from you ❤️! Your feedback helps us make your next shawarma even better. Click the floating feedback icon and drop your feedback.",
+            question: "Do you accept custom shawarma requests?",
+            answer: "Yes! Just message us on WhatsApp — we’ll prepare it exactly how you like 🔥.",
         },
     ];
 
-    const handleCheckboxChange = (value: string) => {
-        setForm((prev) => {
-            const selected = prev.prices.includes(value)
-                ? prev.prices.filter((p) => p !== value)
-                : [...prev.prices, value];
-            return { ...prev, prices: selected };
-        });
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!form.name || !form.email || !form.address || !form.message) {
-            setStatus("⚠️ Please fill all fields before sending.");
-            return;
-        }
-
-        const ceoPhone = "2349166042066"; // your WhatsApp number (no + or spaces)
-
-        const text = `🍗 *New Order / Message for Steady Bite* 🍗
-
-            👤 *Name:* ${form.name}
-            📧 *Email:* ${form.email}
-            📞 *Phone Number:* ${form.phone}
-            🏠 *Address:* ${form.address}
-
-            📦 *Quantity:* ${form.quantity}
-            💰 *Selected Sizes:* ${form.prices.length > 0 ? form.prices.join(", ") : "None"}
-
-            📝 *Customer's Message:*
-                ${form.message}
-
-            Sent from *Steady Bite Website*`
-        ;
-
-        const url = `https://wa.me/${ceoPhone}?text=${encodeURIComponent(text)}`;
-
-        window.open(url, "_blank");
-        setStatus("✅ Opening WhatsApp...");
-        setForm({
-            name: "",
-            email: "",
-            phone: "",
-            prices: [],
-            quantity: "1",
-            address: "",
-            message: "",
-        });
-    };
+    const contacts = [
+        {
+            title: "Call / WhatsApp",
+            icon: <Phone size={38} className="text-[#DB751D]" />,
+            text: "+234 916 604 2066",
+            link: "https://wa.me/2349166042066",
+            btn: "Chat on WhatsApp",
+        },
+        {
+            title: "Email Us",
+            icon: <Mail size={38} className="text-[#DB751D]" />,
+            text: "steadylight8@gmail.com",
+            link: "mailto:steadylight8@gmail.com",
+            btn: "Send Email",
+        },
+        {
+            title: "Visit Our Spot",
+            icon: <MapPin size={38} className="text-[#DB751D]" />,
+            text: "Besides Assemblies of God Church, Rumuosi Junction, PH, Nigeria",
+            link: "https://www.google.com/maps/place/ASSEMBLIES+OF+GOD+CHURCH/@4.8824214,6.9392414,17z",
+            btn: "Open in Maps",
+        },
+    ];
 
     return (
-        <section className="max-w-3xl mx-auto px-4 py-16 text-gray-800">
-            {/* Accordion Section */}
-            <div className="space-y-4">
-                {faqs.map((faq, i) => (
-                    <div key={i} className="border-b border-gray-300">
-                        <button
-                            className="w-full text-left py-3 flex justify-between items-center text-[20px] font-bold"
-                            onClick={() => toggle(i)}
-                        >
-                        {faq.question}
-                        <span className="text-xl">
-                            {openIndex === i ? (
-                                <ChevronUp size={18} />
-                            ) : (
-                                <ChevronDown size={18} />
-                            )}
-                        </span>
-                        </button>
-                        {openIndex === i && (
-                            <p className="pb-4 text-[16px] text-gray-600">{faq.answer}</p>
-                        )}
-                    </div>
-                ))}
+        <section className="w-full text-gray-800">
+
+            {/* HERO SECTION */}
+            <div
+                className="relative h-[350px] md:h-[400px] w-full bg-center bg-cover"
+                style={{ backgroundImage: "url('/shawarma-10.jpg')" }}
+            >
+                <div className="absolute inset-0 bg-black/60"></div>
+
+                {/* Back Button */}
+                <button
+                    onClick={handleBack}
+                    className="absolute md:hidden top-4 left-4 z-50 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition"
+                >
+                    <ChevronLeft size={24} />
+                </button>
+
+                <div className="relative z-10 h-full flex flex-col justify-center items-center text-center text-white px-6">
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-wide">
+                        Contact Steady Bite
+                    </h1>
+                    <p className="max-w-2xl text-lg mt-4 text-gray-200">
+                        We’re here to help you with orders, enquiries, feedback and more.
+                        Let’s make your shawarma experience unforgettable.
+                    </p>
+                </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="mt-16">
-                <h2 className="text-center text-3xl font-bold mb-8 font-fondamento">
-                    Contact us / Place Order
-                </h2>
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name + Email */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block font-semibold mb-1 text-sm">Name</label>
-                            <input
-                                type="text"
-                                placeholder="Enter your name"
-                                value={form.name}
-                                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block font-semibold mb-1 text-sm">Phone Number</label>
-                            <input
-                                type="tel"
-                                placeholder="Enter your whatsapp number"
-                                value={form.phone}
-                                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block font-semibold mb-1 text-sm">Email</label>
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                value={form.email}
-                                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Price checkboxes */}
-                    <div>
-                        <label className="block font-semibold mb-1 text-sm">Select Size / Price</label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            {[
-                                "Normal Size - ₦2,500",
-                                "Medium Size - ₦3,500",
-                                "Jumbo Size - ₦4,500",
-                                "Special Order",
-                            ].map((item) => (
-                                <label key={item} className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    checked={form.prices.includes(item)}
-                                    onChange={() => handleCheckboxChange(item)}
-                                    className="accent-orange-500"
-                                />
-                                <span>{item}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Quantity */}
-                    <div>
-                        <label className="block font-semibold mb-1 text-sm">Quantity</label>
-                        <select
-                            value={form.quantity}
-                            onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
+            {/* CONTACT GRID */}
+            <div className="max-w-6xl mx-auto px-6 -mt-10 md:-mt-20 mb-20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {contacts.map((item, i) => (
+                        <div
+                            key={i}
+                            className="backdrop-blur-xl bg-white/70 border border-white/40 shadow-xl rounded-2xl p-8 text-center hover:scale-[1.03] transition-transform duration-300"
                         >
-                            {Array.from({ length: 100 }, (_, i) => (
-                                <option key={i + 1} value={i + 1}>
-                                    {i + 1}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                            <div className="flex justify-center mb-4">{item.icon}</div>
+                            <h3 className="font-bold text-xl mb-1 text-gray-900">{item.title}</h3>
+                            <p className="text-gray-700">{item.text}</p>
+                            <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-5 inline-block bg-[#DB751D] hover:bg-[#C76416] text-white px-6 py-2 rounded-md shadow-md transition"
+                            >
+                                {item.btn}
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-                    {/* Address */}
-                    <div>
-                        <label className="block font-semibold mb-1 text-sm">Address</label>
-                        <input
-                            type="text"
-                            placeholder="Enter your delivery address"
-                            value={form.address}
-                            onChange={(e) => setForm({ ...form, address: e.target.value })}
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
-                        />
-                    </div>
+            {/* OPENING HOURS */}
+            <div className="max-w-4xl mx-auto mb-20 px-6 bg-[#FFF3EA] border border-[#F4D8C2] md:rounded-2xl p-8 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <Clock className="text-[#DB751D]" size={30} />
+                    <h2 className="text-2xl md:text-3xl font-semibold">Opening Hours</h2>
+                </div>
 
-                    {/* Message */}
-                    <div>
-                        <label className="block font-semibold mb-1 text-sm">Message</label>
-                        <textarea
-                            rows={5}
-                            placeholder="Write your message or custom request..."
-                            value={form.message}
-                            onChange={(e) => setForm({ ...form, message: e.target.value })}
-                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-orange-500"
-                        ></textarea>
-                    </div>
+                <div className="mt-4 text-gray-800 text-lg ml-10">
+                    <p className="flex items-center gap-2 font-medium text-gray-700">
+                        <Calendar size={20} /> Every Day
+                    </p>
+                    <p className="flex items-center gap-2 font-medium text-gray-700 mt-1">
+                        <Timer size={24} /> 6:30 PM – 10:30 PM
+                    </p>
+                </div>
+            </div>
 
-                    {/* Submit */}
-                    <div className="text-center">
-                        <button
-                            type="submit"
-                            className="w-full bg-[#DB751D] hover:bg-[#c96919] text-white px-6 py-3 rounded-md shadow-md transition duration-300"
-                        >
-                            Send via WhatsApp
-                        </button>
-                    </div>
+            {/* FAQ */}
+            <div className="max-w-4xl mx-auto mb-24 px-6">
+                <h2 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
 
-                    {status && (
-                        <p className="text-center mt-2 text-sm font-medium">{status}</p>
-                    )}
-                </form>
+                <div className="space-y-4">
+                    {faqs.map((faq, i) => (
+                        <div key={i} className="border-b border-gray-300 pb-3">
+                            <button
+                                className="w-full flex justify-between items-center py-3 text-lg font-semibold text-left"
+                                onClick={() => toggle(i)}
+                            >
+                                {faq.question}
+                                {openIndex === i ? (
+                                <ChevronUp className="text-[#DB751D]" size={20} />
+                                ) : (
+                                <ChevronDown className="text-[#DB751D]" size={20} />
+                                )}
+                            </button>
+                            {openIndex === i && <p className="text-gray-700 pt-1">{faq.answer}</p>}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* BOTTOM CTA */}
+            <div className="text-center mb-20 px-4">
+                <h2 className="text-3xl font-semibold mb-3">Still have a question?</h2>
+                <p className="text-gray-600 mb-6">
+                    If you need help with anything — orders, issues or feedback — reach out instantly.
+                </p>
+
+                <a
+                    href="https://wa.me/2349166042066"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#DB751D] hover:bg-[#C76416] text-white px-10 py-4 rounded-xl text-lg shadow-lg transition flex items-center gap-2 mx-auto w-max"
+                >
+                    <MessageCircle size={22} />
+                    Message Steady Bite
+                </a>
             </div>
         </section>
     );

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/context/CartContext";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import LoaderHandler, { LoaderProvider, useLoader } from "@/context/LoaderContext";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -47,13 +48,19 @@ export default function RootLayout({
             className={`${poppins.variable} ${fondamento.variable}`}
         >
             <body className="bg-white text-black font-poppins">
-                <CartProvider>
-                    <Navbar />
+                <LoaderProvider>
+                    <LoaderHandler>
 
-                    <main className="min-h-screen">{children}</main>
+                        <CartProvider>
+                            <Navbar />
 
-                    <MobileBottomNav />
-                </CartProvider>
+                            <main className="min-h-screen">{children}</main>
+
+                            <MobileBottomNav />
+                        </CartProvider>
+                    </LoaderHandler>
+
+                </LoaderProvider>
             </body>
         </html>
     );
