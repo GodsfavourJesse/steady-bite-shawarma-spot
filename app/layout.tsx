@@ -10,6 +10,7 @@ const poppins = Poppins({
     subsets: ["latin"],
     weight: ["400", "500", "600", "700"],
     variable: "--font-poppins",
+    display: "swap",
 });
 
 // const metalMania = Metal_Mania({
@@ -22,6 +23,7 @@ const fondamento = Fondamento({
     subsets: ["latin"],
     weight: "400",
     variable: "--font-fondamento",
+    display: "swap",
 });
 
 export const metadata: Metadata = {

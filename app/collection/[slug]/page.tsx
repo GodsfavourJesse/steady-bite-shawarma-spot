@@ -1,25 +1,20 @@
-"use client";
+// app/collection/[slug]/page.tsx
+import type { Metadata } from "next";
+import { createPageTitle } from "@/lib/metadata";
+import SlugPageInner from "./SlugPageInner";
 
-import { useParams } from "next/navigation";
-import { products } from "@/app/data/products";
-import ProductDetailsDesktop from "@/components/productComponents/ProductDetailsDesktop";
-import ProductDetailsMobile from "@/components/productComponents/ProductDetailsMobile";
+interface CollectionPageProps {
+  params: { slug: string };
+}
 
-export default function ProductPage() {
-    const { slug } = useParams();
-    const product = products.find((p) => p.slug === slug);
+// Dynamic metadata based on slug
+export async function generateMetadata({ params }: CollectionPageProps): Promise<Metadata> {
+  return {
+    title: createPageTitle(params.slug),
+  };
+}
 
-    if (!product)
-        return (
-            <div className="p-10 text-center text-red-600 text-lg font-semibold">
-                Product not found
-            </div>
-        );
-
-    return (
-        <>
-            <ProductDetailsMobile product={product} />
-            <ProductDetailsDesktop product={product} />
-        </>
-    );
+// Server component passes slug to client component
+export default function CollectionSlugPage({ params }: CollectionPageProps) {
+  return <SlugPageInner slug={params.slug} />;
 }
