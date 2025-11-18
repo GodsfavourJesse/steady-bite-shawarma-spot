@@ -1,22 +1,25 @@
-import type { Metadata } from "next";
-import { createPageTitle } from "@/lib/metadata";
-import SlugPageInner from "./SlugPageInner";
+"use client";
 
-interface CollectionSlugPageProps {
-    params: {
-        slug: string;
-    };
-    }
+import { useParams } from "next/navigation";
+import { products } from "@/app/data/products";
+import ProductDetailsDesktop from "@/components/productComponents/ProductDetailsDesktop";
+import ProductDetailsMobile from "@/components/productComponents/ProductDetailsMobile";
 
-// Dynamic metadata for each product slug
-export async function generateMetadata({ params }: CollectionSlugPageProps): Promise<Metadata> {
-    const slug = params.slug; // No need to await, Next.js handles the async wrapper internally
-    return {
-        title: createPageTitle(slug),
-    };
-}
+export default function ProductPage() {
+    const { slug } = useParams();
+    const product = products.find((p) => p.slug === slug);
 
-// Server component passes slug to client component
-export default function CollectionSlugPage({ params }: CollectionSlugPageProps) {
-    return <SlugPageInner slug={params.slug} />;
+    if (!product)
+        return (
+            <div className="p-10 text-center text-red-600 text-lg font-semibold">
+                Product not found
+            </div>
+        );
+
+    return (
+        <>
+            <ProductDetailsMobile product={product} />
+            <ProductDetailsDesktop product={product} />
+        </>
+    );
 }
