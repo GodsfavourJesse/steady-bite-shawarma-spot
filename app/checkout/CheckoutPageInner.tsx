@@ -5,7 +5,7 @@ import { calculateDeliveryFee } from "@/components/DeliveryFeeCalculator";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CustomerContactInfo from "@/components/CustomerContactInfo";
-import { ChevronDown, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { metadata } from "../layout";
 import toast, { Toaster } from "react-hot-toast";
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
         setLoading(true);
 
         const handler = window.PaystackPop.setup({
-            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_kEY,
+            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
             email: customer.email,
             amount: total * 100,
             currency: "NGN",
@@ -201,11 +201,6 @@ export default function CheckoutPage() {
                 <p className="text-sm mt-1">{totalItems} {totalItems > 1 ? "items" : "item"} in your cart</p>
             </div>
 
-            {/* Down arrow hover */}
-            {/* <div className=" hdidden md:flex absolute right-20 bottom-50 bg-orange-400 text-white p-2 rounded-full cursor-pointer hover:bg-orange-600 transition">
-                <ChevronDown size={18} />
-            </div> */}
-        
 
             {/* Order Summary */}
             <div className="w-full md:w-1/3 mt-4 md:mt-0 md:sticky md:top-8">
