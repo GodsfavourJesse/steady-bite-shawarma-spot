@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Pencil, Check, X, Truck, ChartBarBig } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { calculateDeliveryFee } from "./DeliveryFeeCalculator";
 
 interface CustomerInfo {
     name: string;
@@ -14,9 +15,21 @@ interface CustomerInfo {
 interface CustomerContactProps {
     customer: CustomerInfo;
     setCustomer: (data: CustomerInfo) => void;
+    totalItems: number; // pass total items, so we can calculate delivery fee
+    deliveryMethod: "ship" | "pickup"; // controlled from parent
+    setDeliveryMethod: (method: "ship" | "pickup") => void; // controlled from parent
 }
 
-export default function CustomerContactInfo({ customer, setCustomer}: CustomerContactProps) {
+export default function CustomerContactInfo({ 
+    customer, 
+    setCustomer, 
+    totalItems,
+    deliveryMethod,
+    setDeliveryMethod
+}: CustomerContactProps) {
+
+    // DELIVERY FEE
+    const deliveryFee = calculateDeliveryFee(totalItems, deliveryMethod);
 
     // CONTACT STATE
     const [isEditingContact, setIsEditingContact] = useState(false);
@@ -28,8 +41,6 @@ export default function CustomerContactInfo({ customer, setCustomer}: CustomerCo
     });
     const [tempContact, setTempContact] = useState(customer);
 
-    // DELIVERY METHOD
-    const [deliveryMethod, setDeliveryMethod] = useState<"ship" | "pickup">("ship");
     
     // ADDRESS STATES
     const [isEditingAddress, setIsEditingAddress] = useState(false);

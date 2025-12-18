@@ -3,11 +3,9 @@
 import { useCart } from "@/context/CartContext";
 import { calculateDeliveryFee } from "@/components/DeliveryFeeCalculator";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import CustomerContactInfo from "@/components/CustomerContactInfo";
 import { ChevronLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { metadata } from "../layout";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function CheckoutPage() {
@@ -18,6 +16,9 @@ export default function CheckoutPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
+    // Delivery method state
+    const [deliveryMethod, setDeliveryMethod] = useState<"ship" | "pickup">("ship");
+
     // Customer info state
     const [customer, setCustomer] = useState({ 
         name: "", 
@@ -26,7 +27,7 @@ export default function CheckoutPage() {
         address: "",
     });
 
-    // 🔹 Load saved customer info from localStorage
+    // Load saved customer info from localStorage
     useEffect(() => {
         const savedCustomer = localStorage.getItem("customerContact");
         if (savedCustomer) {
@@ -40,38 +41,31 @@ export default function CheckoutPage() {
         }
     }, []);
 
-
-
-    // Product hanldling (buy now or cart)
+    // Product handling (Buy Now or cart)
     useEffect(() => {
         const itemParam = searchParams.get("item");
         if (itemParam) {
-            // Single "Buy Now" item
             setCheckoutItems([JSON.parse(decodeURIComponent(itemParam))]);
         } else {
-            // fallback to cart items
             setCheckoutItems(cart);
         }
     }, [cart, searchParams]);
 
-    // Subtotal and totals should be based on checkoutItems
+    // Subtotal and totals
     const subtotal = checkoutItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalItems = checkoutItems.reduce((sum, item) => sum + item.quantity, 0);
-    const deliveryFee = calculateDeliveryFee(totalItems);
+    const deliveryFee = calculateDeliveryFee(totalItems, deliveryMethod);
     const total = subtotal + deliveryFee;
-    
+
     // Load Paystack SDK
     useEffect(() => {
         const script = document.createElement("script");
         script.src = "https://js.paystack.co/v1/inline.js";
         document.body.appendChild(script);
-        return () => {
-            document.body.removeChild(script);
-        }
+        return () => document.body.removeChild(script);
     }, []);
 
-
-    // 🔹 Validation before payment
+    // Validate customer info before payment
     const validateCustomerInfo = () => {
         if (!(customer.name || "").trim()) return "Please enter your full name";
         if (!(customer.email || "").trim()) return "Please enter your email address";
@@ -80,9 +74,7 @@ export default function CheckoutPage() {
         return null;
     };
 
-
-
-    //  Paystack Payment
+    // Paystack Payment
     const handlePayment = () => {
         const error = validateCustomerInfo();
         if (error) {
@@ -90,67 +82,40 @@ export default function CheckoutPage() {
             return;
         }
 
-        // Merge localStorge + current customer state
-        const savedCustomer = JSON.parse(localStorage.getItem("customerContact") || "{}");
-        const info = { ...savedCustomer, ...customer };
-
-        // Extra safety check
-        if (!(info.name || "").trim() ||
-            !(info.email || "").trim() ||
-            !(info.phone || "").trim() ||
-            !(info.address || "").trim()
-        ) {
-            alert("Please fill in all required customer info.");
-            return;
-        }
-
-        
         if (checkoutItems.length === 0) {
-            alert("Your cart is empty!");
+            toast.error("Your cart is empty!");
             return;
         }
 
         setLoading(true);
 
+        const info = { ...customer }; // Merge customer info
+
         const handler = window.PaystackPop.setup({
             key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-            email: customer.email,
+            email: info.email,
             amount: total * 100,
             currency: "NGN",
             ref: "SB" + Math.floor(Math.random() * 1000000000 + 1),
             metadata: {
                 custom_fields: [
-                    {
-                        display_name: "Customer Name",
-                        variable_name: "name",
-                        value: info.name, // use merge info
-                    },
-                    {
-                        display_name: "Customer Phone",
-                        variable_name: "phone",
-                        value: info.phone, // use merge info
-                    },
-                    {
-                        display_name: "Customer Address",
-                        variable_name: "address",
-                        value: info.address, // use merge info
-                    }
+                    { display_name: "Customer Name", variable_name: "name", value: info.name },
+                    { display_name: "Customer Phone", variable_name: "phone", value: info.phone },
+                    { display_name: "Customer Address", variable_name: "address", value: info.address },
                 ]
             },
             label: "Steady Bite Shawarma Spot",
-            onClose: function () {
+            onClose: () => {
                 setLoading(false);
                 toast.error("Payment window closed.");
-                setRedirecting(true)
+                setRedirecting(true);
                 router.push("/checkout/failed");
-                // Redirect to failed page
             },
-            callback: function (response: any) {
+            callback: (response: any) => {
                 clearCart();
                 setLoading(false);
                 toast.success("Payment successful! Ref: " + response.reference);
                 setRedirecting(true);
-                // Redirect to success oage, pass reference as query param
                 router.push(`/checkout/success?ref=${response.reference}`);
             },
         });
@@ -158,10 +123,7 @@ export default function CheckoutPage() {
         handler.openIframe();
     };
 
-    const handleBack = () => {
-        router.back();
-    }
-
+    const handleBack = () => router.back();
 
     return (
         <div className="min-h-screen relative bg-gray-50 flex flex-col items-center md:justify-center md:gap-2 md:p-8 mb-20 md:mb-0">
@@ -177,21 +139,13 @@ export default function CheckoutPage() {
 
             {/* Mobile Header */}
             <header className="md:hidden fixed md:relative w-full z-10 p-4 bg-orange-600 text-white text-center shadow-md flex items-center justify-between">
-                {/* Back Button */}
-                <button
-                    onClick={handleBack}
-                    className="p-2 bg-white/30 rounded-full hover:bg-white/50 transition text-white"
-                >
+                <button onClick={handleBack} className="p-2 bg-white/30 rounded-full hover:bg-white/50 transition text-white">
                     <ChevronLeft size={18} />
                 </button>
-                
-                {/* Header Title */}
                 <div className="flex flex-col items-center flex-1">
                     <h1 className="text-2xl font-semibold">Checkout</h1>
                     <p className="text-sm mt-1">{totalItems} {totalItems > 1 ? "items" : "item"} in your cart</p>
                 </div>
-
-                {/* Placeholder for spacing */}
                 <div className="w-8" />
             </header>
 
@@ -201,16 +155,16 @@ export default function CheckoutPage() {
                 <p className="text-sm mt-1">{totalItems} {totalItems > 1 ? "items" : "item"} in your cart</p>
             </div>
 
-
             {/* Order Summary */}
             <div className="w-full md:w-1/3 mt-4 md:mt-0 md:sticky md:top-8">
-                <div className=" mt-20 w-full p-2">
-                    
-                    {/* Pass customer state and setter */}
+                <div className="mt-20 w-full p-2">
                     <div className="w-full p-2 md:p-0 mb-4">
                         <CustomerContactInfo 
                             customer={customer}
-                            setCustomer={setCustomer} 
+                            setCustomer={setCustomer}
+                            totalItems={totalItems} 
+                            deliveryMethod={deliveryMethod}
+                            setDeliveryMethod={setDeliveryMethod}
                         />
                     </div>
 
